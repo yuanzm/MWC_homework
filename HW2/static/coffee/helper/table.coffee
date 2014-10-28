@@ -15,11 +15,9 @@ define ['require','./event','./node','./helper'], (require) ->
 				temp = {}
 				_tb = []
 
-				# child = node.getELementChild(tab)
 				tableHead = node.getNthChild(tab, 'thead')
 				tableBody = node.getNthChild(tab, 'tbody')
 				if tableHead.length > 0	
-				# if child[0].tagName == "THEAD" and child[child.length - 1].tagName == "TBODY"
 					temp.head = tableHead[0].getElementsByTagName("tr")[0]
 					temp.body = tableBody[0].getElementsByTagName("tr")
 					temp.type = 1
@@ -44,49 +42,47 @@ define ['require','./event','./node','./helper'], (require) ->
 		* @param flag   : an flag to indicate the rule of sort
 		* @return       : an array that arrange in an ascending order or an descending order
 		###
+
+
+		getFirstNotEmptyTd : (array, col) ->
+			one = 0
+			tdCol = []
+			for arr in array
+				tdCol.push(node.getNthChild(arr, 'td', col))
+			for td, index in tdCol
+				if td.innerText != ""
+					one = index
+			tdCol[one] 
+
 		sortTr : (_array, col, flag) ->
-			testCol = node.getNthChild(_array[0],"td", col).innerText
-			stringType = helper.checkType(testCol)
-			# console.log testCol,stringType
+			testCol = _result.getFirstNotEmptyTd(_array,col)
+			stringType = helper.checkType(testCol.innerText)
+			result = []
 			for v1,i1 in _array
 				for v2, i2 in _array
 					_temp1 = node.getNthChild(v1,"td", col).innerText 
 					_temp2 = node.getNthChild(v2,"td", col).innerText	
-					if flag == "up"
-						if stringType == 'float'
-							t2 = parseFloat(_temp2)
-							t1 = parseFloat(_temp1)
-							if t2 > t1
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-						if stringType == 'integer'
-							t1 = parseInt(_temp1)
-							t2 = parseInt(_temp2)
-							if t2 > t1
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-						if stringType == 'hasChinese'
-							if _temp2.localeCompare(_temp1) > 0
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-						if stringType == "notChinese"
-							if _temp2 > _temp1
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]		
-					if flag == "down"
-						if stringType == 'float'
-							t2 = parseFloat(_temp2)
-							t1 = parseFloat(_temp1)
-							if t2 < t1
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-						if stringType == 'integer'
-							t1 = parseInt(_temp1)
-							t2 = parseInt(_temp2)
-							if t2 < t1
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-						if stringType == 'hasChinese'
-							if _temp2.localeCompare(_temp1) > 0
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-						if stringType == "notChinese"
-							if _temp2 < _temp1
-								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
-			return _array
+					if stringType == 'float'
+						t2 = if _temp2 != '' then parseFloat(_temp2) else 0.00
+						t1 = if _temp1 != '' then parseFloat(_temp1) else 0.00
+						if t2 > t1
+							[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+					if stringType == 'integer'
+						t2 = if _temp2 != '' then parseInt(_temp2) else 0
+						t1 = if _temp1 != '' then parseInt(_temp1) else 0
+						if t2 > t1
+							[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+					if stringType == 'hasChinese'
+						if _temp2.localeCompare(_temp1) > 0
+							[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+					if stringType == "notChinese"
+						if _temp2 > _temp1
+							[_array[i2],_array[i1]]=[_array[i1],_array[i2]]	
+			if flag == 'up'
+				result = _array
+			if flag == 'down'
+				result = _array.reverse()
+			return result
 
 		###
 		* The interface of this script.It bind an event handler for every table's head.that is,if you click the table's head,two things  will be executed,one is sort the table's body,two is replace the table's body

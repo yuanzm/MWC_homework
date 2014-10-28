@@ -44,7 +44,27 @@ define ->
 				if sibling != node
 					siblings.push(sibling)
 			return siblings
-		
+
+		###
+		* empty the body of table and replace with an array consist of new table body
+		* @param oldParentNode : the root node of table
+		* @param newNode : an array consist of a new table body
+		* @param type    : a flag to indicate the type of table,which means if the value of type is 1,the table has "THEAD" child node,and if the value of type is 2, the table has no "THEAD" child node.
+		###
+		replaceNode : (oldParentNode, newNode, type)->
+			allTr = []
+			if type == 1
+				tbody = oldParentNode.getElementsByTagName('tbody')[0]
+				allTr = _result.getELementChild(tbody)
+			if type == 2
+				tbody = oldParentNode
+				temp = _result.getNthChild(oldParentNode, 'tr')
+				allTr = temp.slice(1,temp.length)
+			for tr in allTr
+				tbody.removeChild(tr)
+			for node in newNode
+				tbody.appendChild(node)
+
 		###
 		* a function to check if a node has specific class
 		* @param ele : the node to be dealed with
@@ -73,26 +93,5 @@ define ->
 			if _result.hasClass(ele, cls)
 				reg = new RegExp('(\\s|^)'+cls+'(\\s|$)')
 				ele.className = ele.className.replace(reg,' ')
-
-		###
-		* empty the body of table and replace with an array consist of new table body
-		* @param oldParentNode : the root node of table
-		* @param newNode : an array consist of a new table body
-		* @param type    : a flag to indicate the type of table,which means if the value of type is 1,the table has "THEAD" child node,and if the value of type is 2, the table has no "THEAD" child node.
-		###
-		replaceNode : (oldParentNode, newNode, type)->
-			allTr = []
-			if type == 1
-				tbody = oldParentNode.getElementsByTagName('tbody')[0]
-				allTr = _result.getELementChild(tbody)
-			if type == 2
-				tbody = oldParentNode
-				temp = _result.getNthChild(oldParentNode, 'tr')
-				allTr = temp.slice(1,temp.length)
-			for tr in allTr
-				tbody.removeChild(tr)
-			for node in newNode
-				tbody.appendChild(node)
-
 	}
 

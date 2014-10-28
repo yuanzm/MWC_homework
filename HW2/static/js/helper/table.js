@@ -50,71 +50,66 @@
       		* @return       : an array that arrange in an ascending order or an descending order
       */
 
+      getFirstNotEmptyTd: function(array, col) {
+        var arr, index, one, td, tdCol, _i, _j, _len, _len1;
+        one = 0;
+        tdCol = [];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          arr = array[_i];
+          tdCol.push(node.getNthChild(arr, 'td', col));
+        }
+        for (index = _j = 0, _len1 = tdCol.length; _j < _len1; index = ++_j) {
+          td = tdCol[index];
+          if (td.innerText !== "") {
+            one = index;
+          }
+        }
+        return tdCol[one];
+      },
       sortTr: function(_array, col, flag) {
-        var i1, i2, stringType, t1, t2, testCol, v1, v2, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _temp1, _temp2;
-        testCol = node.getNthChild(_array[0], "td", col).innerText;
-        stringType = helper.checkType(testCol);
+        var i1, i2, result, stringType, t1, t2, testCol, v1, v2, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _temp1, _temp2;
+        testCol = _result.getFirstNotEmptyTd(_array, col);
+        stringType = helper.checkType(testCol.innerText);
+        result = [];
         for (i1 = _i = 0, _len = _array.length; _i < _len; i1 = ++_i) {
           v1 = _array[i1];
           for (i2 = _j = 0, _len1 = _array.length; _j < _len1; i2 = ++_j) {
             v2 = _array[i2];
             _temp1 = node.getNthChild(v1, "td", col).innerText;
             _temp2 = node.getNthChild(v2, "td", col).innerText;
-            if (flag === "up") {
-              if (stringType === 'float') {
-                t2 = parseFloat(_temp2);
-                t1 = parseFloat(_temp1);
-                if (t2 > t1) {
-                  _ref = [_array[i1], _array[i2]], _array[i2] = _ref[0], _array[i1] = _ref[1];
-                }
-              }
-              if (stringType === 'integer') {
-                t1 = parseInt(_temp1);
-                t2 = parseInt(_temp2);
-                if (t2 > t1) {
-                  _ref1 = [_array[i1], _array[i2]], _array[i2] = _ref1[0], _array[i1] = _ref1[1];
-                }
-              }
-              if (stringType === 'hasChinese') {
-                if (_temp2.localeCompare(_temp1) > 0) {
-                  _ref2 = [_array[i1], _array[i2]], _array[i2] = _ref2[0], _array[i1] = _ref2[1];
-                }
-              }
-              if (stringType === "notChinese") {
-                if (_temp2 > _temp1) {
-                  _ref3 = [_array[i1], _array[i2]], _array[i2] = _ref3[0], _array[i1] = _ref3[1];
-                }
+            if (stringType === 'float') {
+              t2 = _temp2 !== '' ? parseFloat(_temp2) : 0.00;
+              t1 = _temp1 !== '' ? parseFloat(_temp1) : 0.00;
+              if (t2 > t1) {
+                _ref = [_array[i1], _array[i2]], _array[i2] = _ref[0], _array[i1] = _ref[1];
               }
             }
-            if (flag === "down") {
-              if (stringType === 'float') {
-                t2 = parseFloat(_temp2);
-                t1 = parseFloat(_temp1);
-                if (t2 < t1) {
-                  _ref4 = [_array[i1], _array[i2]], _array[i2] = _ref4[0], _array[i1] = _ref4[1];
-                }
+            if (stringType === 'integer') {
+              t2 = _temp2 !== '' ? parseInt(_temp2) : 0;
+              t1 = _temp1 !== '' ? parseInt(_temp1) : 0;
+              if (t2 > t1) {
+                _ref1 = [_array[i1], _array[i2]], _array[i2] = _ref1[0], _array[i1] = _ref1[1];
               }
-              if (stringType === 'integer') {
-                t1 = parseInt(_temp1);
-                t2 = parseInt(_temp2);
-                if (t2 < t1) {
-                  _ref5 = [_array[i1], _array[i2]], _array[i2] = _ref5[0], _array[i1] = _ref5[1];
-                }
+            }
+            if (stringType === 'hasChinese') {
+              if (_temp2.localeCompare(_temp1) > 0) {
+                _ref2 = [_array[i1], _array[i2]], _array[i2] = _ref2[0], _array[i1] = _ref2[1];
               }
-              if (stringType === 'hasChinese') {
-                if (_temp2.localeCompare(_temp1) > 0) {
-                  _ref6 = [_array[i1], _array[i2]], _array[i2] = _ref6[0], _array[i1] = _ref6[1];
-                }
-              }
-              if (stringType === "notChinese") {
-                if (_temp2 < _temp1) {
-                  _ref7 = [_array[i1], _array[i2]], _array[i2] = _ref7[0], _array[i1] = _ref7[1];
-                }
+            }
+            if (stringType === "notChinese") {
+              if (_temp2 > _temp1) {
+                _ref3 = [_array[i1], _array[i2]], _array[i2] = _ref3[0], _array[i1] = _ref3[1];
               }
             }
           }
         }
-        return _array;
+        if (flag === 'up') {
+          result = _array;
+        }
+        if (flag === 'down') {
+          result = _array.reverse();
+        }
+        return result;
       },
       /*
       		* The interface of this script.It bind an event handler for every table's head.that is,if you click the table's head,two things  will be executed,one is sort the table's body,two is replace the table's body
