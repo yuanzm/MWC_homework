@@ -1,9 +1,12 @@
 (function() {
-  require(['require', './helper/table'], function(require) {
-    var allTable, table;
+  require(['require', './helper/table', './style'], function(require) {
+    var allTable, style, table;
     table = require('./helper/table');
+    style = require('./style');
     allTable = table.getAllTables();
-    return table.makeAllTableSortable(allTable);
+    style.lineStyle(allTable);
+    table.makeAllTableSortable(allTable);
+    return style.changeBackIcon();
   });
 
 }).call(this);

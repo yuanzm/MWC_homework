@@ -25,6 +25,7 @@ define ['require','./event','./node','./helper'], (require) ->
 					temp.head = allTr[0]
 					temp.body = allTr.slice(1,allTr.length)
 					temp.type = 2	
+				temp.copy = temp.body
 				helper.each helper.toArray(temp.body), (_arg) ->
 					_tb.push(_arg.cloneNode(true))
 					temp.body = _tb

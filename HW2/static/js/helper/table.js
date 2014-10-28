@@ -30,6 +30,7 @@
             temp.body = allTr.slice(1, allTr.length);
             temp.type = 2;
           }
+          temp.copy = temp.body;
           helper.each(helper.toArray(temp.body), function(_arg) {
             _tb.push(_arg.cloneNode(true));
             return temp.body = _tb;
