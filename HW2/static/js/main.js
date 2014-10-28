@@ -4,9 +4,10 @@
     table = require('./helper/table');
     style = require('./style');
     allTable = table.getAllTables();
-    style.lineStyle(allTable);
+    style.trStyle();
     table.makeAllTableSortable(allTable);
-    return style.changeBackIcon();
+    style.changeBackIcon();
+    return style.resetStyle();
   });
 
 }).call(this);

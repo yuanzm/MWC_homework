@@ -35,9 +35,31 @@
         }
         return _results;
       },
-      lineStyle: function() {
+      getTable: table.getAllTables(),
+      resetStyle: function() {
+        var allTable, tr, _i, _len, _results;
+        allTable = _result.getTable;
+        _results = [];
+        for (_i = 0, _len = allTable.length; _i < _len; _i++) {
+          table = allTable[_i];
+          _results.push((function() {
+            var _j, _len1, _ref, _results1;
+            _ref = node.getELementChild(table.head);
+            _results1 = [];
+            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+              tr = _ref[_j];
+              _results1.push(event.addHandler(tr, 'click', function() {
+                return _result.trStyle();
+              }));
+            }
+            return _results1;
+          })());
+        }
+        return _results;
+      },
+      trStyle: function() {
         var allTable, index, tbody, tr, _i, _len, _results;
-        allTable = table.getAllTables();
+        allTable = _result.getTable;
         _results = [];
         for (_i = 0, _len = allTable.length; _i < _len; _i++) {
           table = allTable[_i];
@@ -47,6 +69,7 @@
             _results1 = [];
             for (index = _j = 0, _len1 = tbody.length; _j < _len1; index = ++_j) {
               tr = tbody[index];
+              tr.style.backgroundColor = "#fff";
               if (index % 2 !== 0) {
                 _results1.push(tr.style.backgroundColor = "#B7C2C4");
               } else {

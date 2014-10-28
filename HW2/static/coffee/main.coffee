@@ -3,6 +3,7 @@ require ['require','./helper/table','./style'], (require) ->
 	style = require('./style')
 
 	allTable = table.getAllTables()
-	style.lineStyle(allTable)
+	style.trStyle()
 	table.makeAllTableSortable(allTable)
-	style.changeBackIcon();
+	style.changeBackIcon()
+	style.resetStyle()

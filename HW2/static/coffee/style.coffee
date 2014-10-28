@@ -25,15 +25,23 @@ define ['require','./helper/event','./helper/node','./helper/table'], (require) 
 						node.removeClass(@, 'ascend')
 						node.addClass(@, 'descend')
 
-		lineStyle:  ->
-			allTable = table.getAllTables()
+		getTable: table.getAllTables()
+
+		resetStyle: ->
+			allTable = _result.getTable
+			for table in allTable
+				for tr in node.getELementChild(table.head)
+					event.addHandler tr, 'click', ->
+						_result.trStyle()
+
+		trStyle: ->
+			allTable = _result.getTable
 			for table in allTable
 				tbody = table.copy
 				for tr, index in tbody
+					tr.style.backgroundColor = "#fff"
 					if index % 2 != 0
 						tr.style.backgroundColor = "#B7C2C4"
-
-		
 	}
 
 		

@@ -20,10 +20,12 @@ table {
     text-align: left; }
 
 .ascend {
-  background: url(../../images/ascend.png) no-repeat #cfd5f4 right; }
+  background: url(../../images/ascend.png) no-repeat #CFD5F4 right; }
 
 .descend {
-  background: url(../../images/descend.png) no-repeat #cfd5f4 right; }
+  background: url(../../images/descend.png) no-repeat #CFD5F4 right; }
 
 .gray {
   background-color: #B7C2C4; }
+
+/*# sourceMappingURL=sorter.css.map */
