@@ -10,7 +10,7 @@
       */
 
       getAllTables: function() {
-        var allTable, allTr, child, i, tab, table, temp, _i, _len, _tb;
+        var allTable, allTr, i, tab, table, tableBody, tableHead, temp, _i, _len, _tb;
         allTable = [];
         i = 0;
         table = document.getElementsByTagName("table");
@@ -18,14 +18,15 @@
           tab = table[_i];
           temp = {};
           _tb = [];
-          child = node.getELementChild(tab);
-          if (child[0].tagName === "THEAD" && child[child.length - 1].tagName === "TBODY") {
-            temp.head = child[0].getElementsByTagName("tr")[0];
-            temp.body = child[child.length - 1].getElementsByTagName("tr");
+          tableHead = node.getNthChild(tab, 'thead');
+          tableBody = node.getNthChild(tab, 'tbody');
+          if (tableHead.length > 0) {
+            temp.head = tableHead[0].getElementsByTagName("tr")[0];
+            temp.body = tableBody[0].getElementsByTagName("tr");
             temp.type = 1;
           }
-          if (child[0].tagName === 'TBODY') {
-            allTr = helper.toArray(child[0].getElementsByTagName('tr'));
+          if (tableHead.length === 0) {
+            allTr = helper.toArray(tableBody[0].getElementsByTagName("tr"));
             temp.head = allTr[0];
             temp.body = allTr.slice(1, allTr.length);
             temp.type = 2;
@@ -50,21 +51,65 @@
       */
 
       sortTr: function(_array, col, flag) {
-        var i1, i2, v1, v2, _i, _j, _len, _len1, _ref, _ref1, _temp1, _temp2;
+        var i1, i2, stringType, t1, t2, testCol, v1, v2, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _temp1, _temp2;
+        testCol = node.getNthChild(_array[0], "td", col).innerText;
+        stringType = helper.checkType(testCol);
         for (i1 = _i = 0, _len = _array.length; _i < _len; i1 = ++_i) {
           v1 = _array[i1];
           for (i2 = _j = 0, _len1 = _array.length; _j < _len1; i2 = ++_j) {
             v2 = _array[i2];
-            _temp1 = node.getNthChild(v1, "td", col).innerHTML;
-            _temp2 = node.getNthChild(v2, "td", col).innerHTML;
+            _temp1 = node.getNthChild(v1, "td", col).innerText;
+            _temp2 = node.getNthChild(v2, "td", col).innerText;
             if (flag === "up") {
-              if (_temp2 > _temp1) {
-                _ref = [_array[i1], _array[i2]], _array[i2] = _ref[0], _array[i1] = _ref[1];
+              if (stringType === 'float') {
+                t2 = parseFloat(_temp2);
+                t1 = parseFloat(_temp1);
+                if (t2 > t1) {
+                  _ref = [_array[i1], _array[i2]], _array[i2] = _ref[0], _array[i1] = _ref[1];
+                }
+              }
+              if (stringType === 'integer') {
+                t1 = parseInt(_temp1);
+                t2 = parseInt(_temp2);
+                if (t2 > t1) {
+                  _ref1 = [_array[i1], _array[i2]], _array[i2] = _ref1[0], _array[i1] = _ref1[1];
+                }
+              }
+              if (stringType === 'hasChinese') {
+                if (_temp2.localeCompare(_temp1) > 0) {
+                  _ref2 = [_array[i1], _array[i2]], _array[i2] = _ref2[0], _array[i1] = _ref2[1];
+                }
+              }
+              if (stringType === "notChinese") {
+                if (_temp2 > _temp1) {
+                  _ref3 = [_array[i1], _array[i2]], _array[i2] = _ref3[0], _array[i1] = _ref3[1];
+                }
               }
             }
             if (flag === "down") {
-              if (_temp2 < _temp1) {
-                _ref1 = [_array[i1], _array[i2]], _array[i2] = _ref1[0], _array[i1] = _ref1[1];
+              if (stringType === 'float') {
+                t2 = parseFloat(_temp2);
+                t1 = parseFloat(_temp1);
+                if (t2 < t1) {
+                  _ref4 = [_array[i1], _array[i2]], _array[i2] = _ref4[0], _array[i1] = _ref4[1];
+                }
+              }
+              if (stringType === 'integer') {
+                t1 = parseInt(_temp1);
+                t2 = parseInt(_temp2);
+                if (t2 < t1) {
+                  _ref5 = [_array[i1], _array[i2]], _array[i2] = _ref5[0], _array[i1] = _ref5[1];
+                }
+              }
+              if (stringType === 'hasChinese') {
+                if (_temp2.localeCompare(_temp1) > 0) {
+                  _ref6 = [_array[i1], _array[i2]], _array[i2] = _ref6[0], _array[i1] = _ref6[1];
+                }
+              }
+              if (stringType === "notChinese") {
+                if (_temp2 < _temp1) {
+                  _ref7 = [_array[i1], _array[i2]], _array[i2] = _ref7[0], _array[i1] = _ref7[1];
+                }
               }
             }
           }

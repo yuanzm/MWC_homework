@@ -15,13 +15,16 @@ define ['require','./event','./node','./helper'], (require) ->
 				temp = {}
 				_tb = []
 
-				child = node.getELementChild(tab)
-				if child[0].tagName == "THEAD" and child[child.length - 1].tagName == "TBODY"
-					temp.head = child[0].getElementsByTagName("tr")[0]
-					temp.body = child[child.length - 1].getElementsByTagName("tr")
+				# child = node.getELementChild(tab)
+				tableHead = node.getNthChild(tab, 'thead')
+				tableBody = node.getNthChild(tab, 'tbody')
+				if tableHead.length > 0	
+				# if child[0].tagName == "THEAD" and child[child.length - 1].tagName == "TBODY"
+					temp.head = tableHead[0].getElementsByTagName("tr")[0]
+					temp.body = tableBody[0].getElementsByTagName("tr")
 					temp.type = 1
-				if child[0].tagName == 'TBODY'
-					allTr = helper.toArray child[0].getElementsByTagName('tr')
+				if tableHead.length == 0
+					allTr = helper.toArray tableBody[0].getElementsByTagName("tr")
 					temp.head = allTr[0]
 					temp.body = allTr.slice(1,allTr.length)
 					temp.type = 2	
@@ -42,16 +45,47 @@ define ['require','./event','./node','./helper'], (require) ->
 		* @return       : an array that arrange in an ascending order or an descending order
 		###
 		sortTr : (_array, col, flag) ->
+			testCol = node.getNthChild(_array[0],"td", col).innerText
+			stringType = helper.checkType(testCol)
+			# console.log testCol,stringType
 			for v1,i1 in _array
 				for v2, i2 in _array
-					_temp1 = node.getNthChild(v1,"td", col).innerHTML 
-					_temp2 = node.getNthChild(v2,"td", col).innerHTML
+					_temp1 = node.getNthChild(v1,"td", col).innerText 
+					_temp2 = node.getNthChild(v2,"td", col).innerText	
 					if flag == "up"
-						if _temp2 > _temp1
-							[_array[i2],_array[i1]]=[_array[i1],_array[i2]]		
+						if stringType == 'float'
+							t2 = parseFloat(_temp2)
+							t1 = parseFloat(_temp1)
+							if t2 > t1
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == 'integer'
+							t1 = parseInt(_temp1)
+							t2 = parseInt(_temp2)
+							if t2 > t1
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == 'hasChinese'
+							if _temp2.localeCompare(_temp1) > 0
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == "notChinese"
+							if _temp2 > _temp1
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]		
 					if flag == "down"
-						if _temp2 < _temp1
-							[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == 'float'
+							t2 = parseFloat(_temp2)
+							t1 = parseFloat(_temp1)
+							if t2 < t1
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == 'integer'
+							t1 = parseInt(_temp1)
+							t2 = parseInt(_temp2)
+							if t2 < t1
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == 'hasChinese'
+							if _temp2.localeCompare(_temp1) > 0
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
+						if stringType == "notChinese"
+							if _temp2 < _temp1
+								[_array[i2],_array[i1]]=[_array[i1],_array[i2]]
 			return _array
 
 		###
