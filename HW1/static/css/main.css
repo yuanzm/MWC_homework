@@ -1,3 +1,11 @@
+@charset "UTF-8";
+/*
+ * Author: yuanzm
+ * Last-Edit-Date: 2015-03-04
+ */
+/*
+ * 设定位置
+ */
 * {
   margin: 0;
   padding: 0; }
@@ -14,10 +22,10 @@ ul {
   background-color: #999fd3;
   position: absolute;
   left: 50%;
-  width: 35px;
-  height: 35px;
   margin-left: -17.5px;
   bottom: 100px;
+  width: 35px;
+  height: 35px;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
@@ -188,5 +196,3 @@ ul {
   top: -5px;
   right: -3px;
   color: #fff; }
-
-/*# sourceMappingURL=main.css.map */
